@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+trap 'echo "Error en la línea $LINENO"' ERR
+
+INPUT_LIST="flatcafs.txt"
+OUTPUT="$WORK_DIR/data/df/test.df"
+CONFIG="lambda_pre_config.py"
+INPUT_LIST="$WORK_DIR/scripts/flatcafs.txt"
+N_FILES="5"
+N_JOBS="0"
+
+mkdir -p "$(dirname "$OUTPUT")"
+
+echo "Running df maker..."
+
+python "${CAFPYANA_DIR}/run_df_maker.py" \
+    -c "${CAFPYANA_DIR}/configs/${CONFIG}" \
+    -l "$INPUT_LIST" \
+    -o "$OUTPUT" \
+    -nfile "$N_FILES"
+
+echo "Done."
+
