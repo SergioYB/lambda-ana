@@ -1,0 +1,379 @@
+# General configurations
+
+categories: &categories
+  Signal: ["is_lambda_signal", "==1"]
+  Hyperon_background: ["n_hyperon", ">=1"]
+  Cosmics: ["gen_index", ">1"]
+  Nu_background: ["gen_index", "==1"]
+
+categories_colors: &categories_colors
+  Signal: "#2ecc71"
+  Hyperon_background: "#9b59b6"
+  Cosmics: "#3498db"
+  Nu_background: "#e74c3c"
+
+pre_categories: &pre_categories
+    Signal : ['is_lambda_signal', '==1']
+    Cosmics:   ['genie_mode', "<0"]
+    Nu_background: ['genie_mode', ">=0"]
+
+plot_kwargs: &plot_kwargs
+    alpha: 0.7  
+
+
+initial_amounts:
+    initial_signal: 417
+    initial_bck: 26223000
+
+
+# Set of cuts
+frans_cuts:
+    n_vtx_pair: &n_vtx_pair
+        cut:
+            cut_type: "cut"
+            name: "N vertices pairs"
+            variable: "frans_n_angles"
+            operator: ">="
+            value: 1
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0, 5, 1]
+        discrete: true
+        split_signal: true
+        plot_kwargs: *plot_kwargs
+    
+    frans_score: &frans_score
+      cut:
+        cut_type: "cut"
+        name: "FRANS Score"
+        variable: "frans_score"
+        operator: ">"
+        value: 0.2
+      #title: "Title"
+      weights_col: "scale"
+      categ_col: "category"
+      categories: *categories
+      categ_colors: *categories_colors
+      logy: false
+      bins: [-0.4, 0.4, 0.02]
+      discrete: false
+      split_signal: true
+      plot_kwargs: *plot_kwargs
+
+    michel_score:
+      cut:
+        cut_type: "cut"
+        name: "Michel Score"
+        variable: "michel_final_score"
+        operator: ">="
+        value: 0.9 #0.5
+      #title: "Title"
+      weights_col: "scale"
+      categ_col: "category"
+      categories: *categories
+      categ_colors: *categories_colors
+      logy: false
+      bins: [-1, 2.2, 0.1]
+      discrete: false
+      split_signal: true
+      plot_kwargs: *plot_kwargs
+    
+    contained_angle: &contained_angle
+      cut:
+        cut_type: "cut"
+        name: "$\\phi$ (contained angle) [Deg]"
+        variable: "frans_contained_phi"
+        operator: "<"
+        value: 1.8 #2.5
+      #title: "Title"
+      weights_col: "scale"
+      categ_col: "category"
+      categories: *categories
+      categ_colors: *categories_colors
+      logy: true
+      bins: [0, 14, 0.6]
+      discrete: false
+      split_signal: true
+      plot_kwargs: *plot_kwargs
+    
+    pz_sign: &pz_sign
+      cut:
+        cut_type: "cut"
+        name: 'Pz sign'
+        variable: "frans_pzsign"
+        operator: "=="
+        value: 2
+      #title: "Title"
+      weights_col: "scale"
+      categ_col: "category"
+      categories: *categories
+      categ_colors: *categories_colors
+      logy: false
+      bins: [-4,4,1]
+      discrete: true
+      split_signal: true
+      plot_kwargs: *plot_kwargs
+
+    unassoc_origins: &unassoc_origins
+      cut:
+        cut_type: "cut"
+        name: 'N unassoc. origins'
+        variable: "frans_n_unassoc_origins"
+        operator: "<"
+        value: 1
+      #title: "Title"
+      weights_col: "scale"
+      categ_col: "category"
+      categories: *categories
+      categ_colors: *categories_colors
+      logy: false
+      bins: [0,5,1]
+      discrete: true
+      split_signal: true
+      plot_kwargs: *plot_kwargs
+
+    unassoc_hits: &unassoc_hits
+      cut:
+        cut_type: "cut"
+        name: 'N unassoc. hits'
+        variable: "frans_n_max_dirt_unassoc_hits"
+        operator: "<"
+        value: 10
+      #title: "Title"
+      weights_col: "scale"
+      categ_col: "category"
+      categories: *categories
+      categ_colors: *categories_colors
+      logy: false
+      bins: [0,80, 1]
+      discrete: false
+      split_signal: true
+      plot_kwargs: *plot_kwargs
+
+
+frans_cuts_no_michel:
+    n_vtx_pair: *n_vtx_pair
+    frans_score: *frans_score
+    contained_angle: *contained_angle
+    pz_sign: *pz_sign
+    unassoc_origins: *unassoc_origins
+    unassoc_hits: *unassoc_hits
+
+
+pid_cuts:
+    pid:
+        cut:
+            cut_type: "cut"
+            name: "PID"
+            variable: "pid_cut"
+            operator: "=="
+            value: 1
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *categories
+        categ_colors: *categories_colors
+        logy: false
+        bins: [0,2,1]
+        discrete: true
+        split_signal: true
+        plot_kwargs: *plot_kwargs
+
+    inv_mass:
+        cut:
+            cut_type: "range"
+            name: "Invariant mass [MeV]"
+            variable: "InvariantMass"
+            lower: 1000
+            upper: 1500
+            lower_inclusive: false
+            upper_inclusive: false
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *categories
+        categ_colors: *categories_colors
+        logy: false
+        bins: [800, 2000, 24]
+        discrete: false
+        split_signal: true
+        plot_kwargs: *plot_kwargs
+
+my_pid_cuts:
+    pid:
+        cut:
+            cut_type: "cut"
+            name: "PID"
+            variable: "has_v"
+            operator: "=="
+            value: True
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *categories
+        categ_colors: *categories_colors
+        logy: false
+        bins: [0,2,1]
+        discrete: true
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+        
+
+
+preselection_cuts:
+    nu_score:
+        cut:
+            cut_type: "cut"
+            name: "Nu score"
+            variable: "nu_score"
+            operator: ">="
+            value: 0.5
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *pre_categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0, 1, 0.05]
+        discrete: false
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+    
+    bcfm_score:
+        cut:
+            cut_type: "cut"
+            name: "BCFM score"
+            variable: "bcfm_score"
+            operator: ">="
+            value: 0.04
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *pre_categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0, 0.2, 0.01]
+        discrete: false
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+
+    fv:
+        cut:
+            cut_type: "cut"
+            name: "FV"
+            variable: "slc_in_fv"
+            operator: "=="
+            value: 1
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *pre_categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0,2,1]
+        discrete: true
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+
+    prim_pfp:
+        cut:
+            cut_type: "range"
+            name: "# prim pfps"
+            variable: "n_prim_pfps"
+            lower: 2
+            upper: 5
+            lower_inclusive: true
+            upper_inclusive: false
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *pre_categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0, 17, 1]
+        discrete: true
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+
+    prim_trks:
+        cut:
+            cut_type: "range"
+            name: "# prim tracks"
+            variable: "n_prim_trks"
+            lower: 1
+            upper: 4
+            lower_inclusive: true
+            upper_inclusive: false
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *pre_categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0, 5, 1]
+        discrete: true
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+
+    prim_shwrs:
+        cut:
+            cut_type: "range"
+            name: "# prim shwrs"
+            variable: "n_prim_shwrs"
+            lower: 0
+            upper: 2
+            lower_inclusive: true
+            upper_inclusive: false
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *pre_categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0, 4, 1]
+        discrete: true
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+
+    trks_exiting:
+        cut:
+            cut_type: "cut"
+            name: "# trks exiting"
+            variable: "n_trks_exit"
+            operator: "<"
+            value: 2
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *pre_categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0, 6, 1]
+        discrete: true
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+
+    gap:
+        cut:
+            cut_type: "cut"
+            name: "Max gap [cm]"
+            variable: "max_gap"
+            operator: ">"
+            value: 1
+        #title: "Title"
+        weights_col: "scale"
+        categ_col: "category"
+        categories: *pre_categories
+        categ_colors: *categories_colors
+        logy: true
+        bins: [0, 20, 0.5]
+        discrete: false
+        split_signal: false
+        plot_kwargs: *plot_kwargs
+
+
+    

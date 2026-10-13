@@ -20,6 +20,12 @@ import seaborn as sns
 
 
 
+
+
+
+
+
+
 # Cuts parameters
 
 NU_SCORE_CUT = 0.5
@@ -141,9 +147,11 @@ def plot_stack(df: pd.DataFrame, cfg: PlotConfig, ax = None):
 
     if cfg.var == 'bcfm_score':
        bins = np.linspace(0,0.2,30)
+    elif cfg.var == 'frans_n_max_dirt_unassoc_hits':
+        bins = np.arange(0,200)
     elif cfg.var == 'nu_score':
        bins = np.linspace(0,1,30)
-        
+
     ax.hist(
         data,
         bins=bins,
@@ -166,6 +174,8 @@ def plot_stack(df: pd.DataFrame, cfg: PlotConfig, ax = None):
     ax.legend()
     ax.set_xlabel(cfg.xlabel or cfg.var)
     ax.set_ylabel(cfg.ylabel)
+
+    ax.set_ylim(bottom=1e-1)
 
     if cfg.logy:
         ax.set_yscale('log')
